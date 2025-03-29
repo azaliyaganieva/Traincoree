@@ -133,6 +133,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\SeatSelectionPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\StartEndDatePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -152,6 +156,9 @@
     </Compile>
     <Compile Include="Pages\RegistrationPage.xaml.cs">
       <DependentUpon>RegistrationPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SeatSelectionPage.xaml.cs">
+      <DependentUpon>SeatSelectionPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\StartEndDatePage.xaml.cs">
       <DependentUpon>StartEndDatePage.xaml</DependentUpon>

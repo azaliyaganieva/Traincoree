@@ -8,6 +8,6 @@ namespace Traincore.Connection
 {
     internal class DBconnect
     {
-        public static TrainEntities1 train = new TrainEntities1();
+        public static TrainEntities1 trainEntities = new TrainEntities1();
     }
 }

@@ -9,20 +9,50 @@
       Title="TrainSelectionPage">
 
     <Grid>
-        <ListView x:Name="TrainsListView" Margin="10">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Номер поезда" DisplayMemberBinding="{Binding Trains.Number_train}" Width="80"/>
-                    <GridViewColumn Header="Отправление" DisplayMemberBinding="{Binding Schedule.Date_Start}" Width="100"/>
-                    <GridViewColumn Header="Время отправления" DisplayMemberBinding="{Binding Schedule.Time_Start}" Width="100"/>
-                    <GridViewColumn Header="Прибытие" DisplayMemberBinding="{Binding Schedule.Date_finish}" Width="100"/>
-                    <GridViewColumn Header="Время прибытия" DisplayMemberBinding="{Binding Schedule.Time_finish}" Width="100"/>
-                    <GridViewColumn Header="Тип" DisplayMemberBinding="{Binding Type_trains.Name_type_train}" Width="80"/>
-                    <GridViewColumn Header="Места" DisplayMemberBinding="{Binding Seats.IsAvailable}" Width="60"/>
-                    <GridViewColumn Header="Цена" DisplayMemberBinding="{Binding Seats.Price}" Width="60"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
-        <Button Content="Выбрать" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="100" Click="Button_Click"/>
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Text="Поиск поездов" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBlock Text="Станция отправления:" Width="150" VerticalAlignment="Center"/>
+                <ComboBox x:Name="StartStationComboBox" Width="200" DisplayMemberPath="Name_Station"/>
+
+                <TextBlock Text="Станция назначения:" Width="150" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                <ComboBox x:Name="EndStationComboBox" Width="200" DisplayMemberPath="Name_Station"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBlock Text="Дата отправления:" Width="150" VerticalAlignment="Center"/>
+                <DatePicker x:Name="DatePicker" Width="200"/>
+
+                <Button x:Name="SearchTrainsButton" Content="Найти поезда" Margin="10,0,0,0" 
+                    Width="120" Height="30" Click="SearchTrainsButton_Click"/>
+            </StackPanel>
+
+            <DataGrid x:Name="TrainsDataGrid" Grid.Row="3" AutoGenerateColumns="False" 
+                  CanUserAddRows="False" IsReadOnly="True" SelectionMode="Single">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Номер поезда" Binding="{Binding TrainNumber}" Width="100"/>
+                    <DataGridTextColumn Header="Название" Binding="{Binding TrainName}" Width="150"/>
+                    <DataGridTextColumn Header="Отправление" Binding="{Binding DepartureTime, StringFormat=HH:mm}" Width="80"/>
+                    <DataGridTextColumn Header="Прибытие" Binding="{Binding ArrivalTiime, StringFormat=HH:mm}" Width="80"/>
+                    <DataGridTextColumn Header="Дата отпр." Binding="{Binding DepartureDate, StringFormat=dd.MM.yyyy}" Width="100"/>
+                    <DataGridTextColumn Header="Дата прибытия" Binding="{Binding ArrivalDate, StringFormat=dd.MM.yyyy}" Width="100"/>
+                    <DataGridTextColumn Header="Станция отпр." Binding="{Binding StartStation}" Width="150"/>
+                    <DataGridTextColumn Header="Станция назнач." Binding="{Binding EndStation}" Width="150"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <Button x:Name="SelectTrainButton" Grid.Row="4" Content="Выбрать поезд" 
+                HorizontalAlignment="Right" Width="120" Height="30" 
+                Margin="0,10,0,0" Click="SelectTrainButton_Click"/>
+        </Grid>
     </Grid>
 </Page>
