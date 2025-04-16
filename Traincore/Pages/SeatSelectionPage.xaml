@@ -3,73 +3,164 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:Traincore.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="SeatSelectionPage">
+      Title="Выбор места"
+      Background="#FFF5F5F5"
+      FontFamily="Segoe UI"  MaxHeight="1080" MaxWidth="1920" MinHeight="450" MinWidth="800">
+
+    <Page.Resources>
+        <!-- Стиль для кнопок -->
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#FFD32F2F"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#FFB71C1C"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Margin" Value="5"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FFB71C1C"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="#FFCDCDCD"/>
+                    <Setter Property="BorderBrush" Value="#FFABABAB"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Стиль для кнопок мест -->
+        <Style TargetType="Button" x:Key="SeatButtonStyle" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Width" Value="50"/>
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="5"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsAvailable}" Value="True">
+                    <Setter Property="Background" Value="#FF4CAF50"/>
+                    <Setter Property="BorderBrush" Value="#FF388E3C"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsAvailable}" Value="False">
+                    <Setter Property="Background" Value="#FFD32F2F"/>
+                    <Setter Property="BorderBrush" Value="#FFB71C1C"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Стиль для ListBox (вагоны) -->
+        <Style TargetType="ListBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+
+        <Style TargetType="ListBoxItem">
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Margin" Value="2"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#FFD32F2F"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Стиль для TabControl -->
+        <Style TargetType="TabControl">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+
+        <Style TargetType="TabItem">
+            <Setter Property="Background" Value="#FFD32F2F"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="BorderBrush" Value="#FFB71C1C"/>
+            <Setter Property="BorderThickness" Value="1,1,1,0"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Margin" Value="2,0,2,0"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="White"/>
+                    <Setter Property="Foreground" Value="#FFD32F2F"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Page.Resources>
 
     <Grid>
-        <Grid Margin="10">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+        <Border Background="White" CornerRadius="8" Margin="10" Padding="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="0" Text="Выбор места" 
-                   FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+                <!-- Заголовок -->
+                <Border Grid.Row="0" Background="#FFD32F2F" CornerRadius="4" Padding="10" Margin="0,0,0,10">
+                    <TextBlock Text="Выбор места" 
+                               Foreground="White"
+                               FontSize="20" 
+                               FontWeight="Bold"
+                               HorizontalAlignment="Center"/>
+                </Border>
 
-            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,20">
-                <TextBlock Text="Поезд:" FontWeight="Bold" Margin="0,0,5,0"/>
-                <TextBlock x:Name="TrainInfoTextBlock"/>
+                <!-- Информация о поезде -->
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,20">
+                    <TextBlock Text="Поезд:" FontWeight="Bold" Margin="0,0,5,0"/>
+                    <TextBlock x:Name="TrainInfoTextBlock" Foreground="#FFD32F2F"/>
 
-                <TextBlock Text="Маршрут:" FontWeight="Bold" Margin="20,0,5,0"/>
-                <TextBlock x:Name="RouteInfoTextBlock"/>
+                    <TextBlock Text="Маршрут:" FontWeight="Bold" Margin="20,0,5,0"/>
+                    <TextBlock x:Name="RouteInfoTextBlock" Foreground="#FFD32F2F"/>
 
-                <TextBlock Text="Дата:" FontWeight="Bold" Margin="20,0,5,0"/>
-                <TextBlock x:Name="DateInfoTextBlock"/>
-            </StackPanel>
+                    <TextBlock Text="Дата:" FontWeight="Bold" Margin="20,0,5,0"/>
+                    <TextBlock x:Name="DateInfoTextBlock" Foreground="#FFD32F2F"/>
+                </StackPanel>
 
-            <TabControl Grid.Row="2">
-                <TabItem Header="Вагоны">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="200"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                <!-- Выбор вагона и места -->
+                <TabControl Grid.Row="2">
+                    <TabItem Header="Вагоны">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="200"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                        <ListBox x:Name="WagonsListBox" DisplayMemberPath="Number_wagon"
-                             SelectionChanged="WagonsListBox_SelectionChanged"/>
+                            <ListBox x:Name="WagonsListBox" 
+                                     SelectionChanged="WagonsListBox_SelectionChanged"
+                                     DisplayMemberPath="Number_wagon"/>
 
-                        <ItemsControl Grid.Column="1" x:Name="SeatsItemsControl">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel/>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Button Content="{Binding Number_seats}" 
-                                        Width="50" Height="50" Margin="5"
-                                        
-                                        IsEnabled="{Binding IsAvailable}"
-                                        Click="SeatButton_Click"/>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </Grid>
-                </TabItem>
-            </TabControl>
+                            <ItemsControl Grid.Column="1" x:Name="SeatsItemsControl">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Button Content="{Binding Number_seats}" 
+                                                Style="{StaticResource SeatButtonStyle}"
+                                                IsEnabled="{Binding IsAvailable}"
+                                                Click="SeatButton_Click"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
 
-            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button x:Name="BackButton" Content="Назад" 
-                    Width="100" Height="30" Margin="0,0,10,0"
-                    Click="BackButton_Click"/>
-                <Button x:Name="BookButton" Content="Забронировать" 
-                    Width="120" Height="30" IsEnabled="False"
-                    Click="BookButton_Click"/>
-            </StackPanel>
-        </Grid>
+                <!-- Кнопки управления -->
+                <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button x:Name="BackButton" Content="Назад" 
+                            Width="100" Height="30" Margin="0,0,10,0"
+                            Click="BackButton_Click"/>
+                    <Button x:Name="BookButton" Content="Забронировать" 
+                            Width="120" Height="30" IsEnabled="False"
+                            Click="BookButton_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
     </Grid>
 </Page>

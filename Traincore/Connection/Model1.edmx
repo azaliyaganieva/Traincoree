@@ -563,7 +563,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="TrainEntities1" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="TrainEntities2" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Marshrut" EntityType="Self.Marshrut" />
           <EntitySet Name="Passangers" EntityType="Self.Passangers" />
           <EntitySet Name="Schedule" EntityType="Self.Schedule" />
@@ -625,7 +625,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="Хранилище TrainModelContainer" CdmEntityContainer="TrainEntities1">
+        <EntityContainerMapping StorageEntityContainer="Хранилище TrainModelContainer" CdmEntityContainer="TrainEntities2">
           <EntitySetMapping Name="Marshrut">
             <EntityTypeMapping TypeName="TrainModel.Marshrut">
               <MappingFragment StoreEntitySet="Marshrut">

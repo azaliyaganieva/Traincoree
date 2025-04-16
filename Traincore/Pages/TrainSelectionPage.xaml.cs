@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.CSharp.RuntimeBinder;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Entity;
@@ -24,7 +25,7 @@ namespace Traincore.Pages
     /// </summary>
     public partial class TrainSelectionPage : Page
     {
-            private List<Schedule> _schedules;
+        private List<Schedule> _schedules;
         private List<Stations> _stations;
         private DateTime _selectedDate = DateTime.Today;
 
@@ -72,8 +73,8 @@ namespace Traincore.Pages
                 _schedules = DBconnect.trainEntities.Schedule
                     .Include(s => s.Marshrut)
                     .Include(s => s.Trains)
-                    .Include(s => s.Marshrut.Stations) // Start station
-                    .Include(s => s.Marshrut.Stations) // End station
+                    .Include(s => s.Marshrut.Stations) 
+                    .Include(s => s.Marshrut.Stations1) 
                     .Where(s => s.Marshrut.ID_start_station == startStation.ID_Station &&
                                 s.Marshrut.ID_finish_station == endStation.ID_Station &&
                                 DbFunctions.TruncateTime(s.Date_Start) == _selectedDate.Date)
@@ -83,12 +84,12 @@ namespace Traincore.Pages
                 {
                     TrainNumber = s.Trains.Number_train,
                     TrainName = s.Trains.Name_train,
-                    DepartureTime = s.Time_start,
-                    ArrivalTime = s.Time_finish,
+                    DepartureTime = s.Time_start.ToString(),
+                    ArrivalTime = s.Time_finish.ToString(),
                     DepartureDate = s.Date_Start,
                     ArrivalDate = s.Date_finish,
                     StartStation = s.Marshrut.Stations.Name_Station,
-                    EndStation = s.Marshrut.Stations.Name_Station,
+                    EndStation = s.Marshrut.Stations1.Name_Station, 
                     ScheduleId = s.ID_Schedule
                 }).ToList();
 
@@ -105,23 +106,64 @@ namespace Traincore.Pages
 
         private void SelectTrainButton_Click(object sender, RoutedEventArgs e)
         {
-            
+           
             if (TrainsDataGrid.SelectedItem == null)
             {
-                MessageBox.Show("Пожалуйста, выберите поезд");
+                MessageBox.Show("Пожалуйста, выберите поезд из списка.");
                 return;
             }
 
+           
+            var selectedItem = TrainsDataGrid.SelectedItem as dynamic;
+            if (selectedItem == null)
+            {
+                MessageBox.Show("Ошибка: не удалось прочитать выбранный поезд.");
+                return;
+            }
+
+       
+            int scheduleId;
             try
             {
-                dynamic selectedItem = TrainsDataGrid.SelectedItem;
-                int scheduleId = selectedItem.ScheduleId;
-                var selectedSchedule = (Schedule)TrainsDataGrid.SelectedItem;
-                var seatSelectionPage = new SeatSelectionPage(selectedSchedule, _selectedDate);
+                scheduleId = selectedItem.ScheduleId;
+            }
+            catch (RuntimeBinderException)
+            {
+                MessageBox.Show("Ошибка: у выбранного поезда нет идентификатора расписания.");
+                return;
+            }
+
+            
+            if (_schedules == null || !_schedules.Any())
+            {
+                MessageBox.Show("Ошибка: список поездов не загружен.");
+                return;
+            }
+
+            
+            var selectedSchedule = _schedules.FirstOrDefault(s => s.ID_Schedule == scheduleId);
+            if (selectedSchedule == null)
+            {
+                MessageBox.Show("Ошибка: выбранный поезд не найден в базе данных.");
+                return;
+            }
+
+            
+            if (_selectedDate == null)
+            {
+                MessageBox.Show("Ошибка: дата не установлена.");
+                return;
+            }
+
+            
+            try
+            {
+                //var seatSelectionPage = new SeatSelectionPage(selectedSchedule, _selectedDate);
+                NavigationService.Navigate(new SeatSelectionPage(selectedSchedule, _selectedDate));
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при переходе к выбору мест: {ex.Message}");
+                MessageBox.Show($"Ошибка при открытии страницы выбора мест:\n{ex.Message}");
             }
         }
     }

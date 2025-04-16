@@ -13,10 +13,10 @@ namespace Traincore.Connection
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class TrainEntities1 : DbContext
+    public partial class TrainEntities2 : DbContext
     {
-        public TrainEntities1()
-            : base("name=TrainEntities1")
+        public TrainEntities2()
+            : base("name=TrainEntities2")
         {
         }
     

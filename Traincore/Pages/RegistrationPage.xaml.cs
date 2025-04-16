@@ -27,7 +27,7 @@ namespace Traincore.Pages
 
         private void btnReg_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new StartEndDatePage());
+            NavigationService.Navigate(new TrainSelectionPage());
         }
 
         private void Nametxb_TextChanged(object sender, TextChangedEventArgs e)
